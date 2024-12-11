@@ -1,0 +1,13 @@
+# Configuration files with sensitive data
+src/config_local.py
+
+# Generated files
+Wallpapers/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.venv
+env/
+venv/
