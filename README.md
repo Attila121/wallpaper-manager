@@ -29,7 +29,7 @@ cd wallpaper-manager
 2. Create a virtual environment
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 ```
 
 3. Install dependencies
@@ -64,17 +64,3 @@ This project is under active development. Here's our roadmap:
    - Windows installer
    - Android APK
    - App store deployment
-
-## Contributing
-
-We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- BeeWare project for cross-platform capabilities
-- Wallpaper API providers
-- All contributors and supporters
