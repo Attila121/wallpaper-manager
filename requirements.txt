@@ -1,0 +1,12 @@
+# Core dependencies
+Pillow>=9.0.0  # Image processing
+requests>=2.26.0  # HTTP requests
+tkinter  # GUI (usually comes with Python)
+
+# Development dependencies
+pytest>=6.0.0  # Testing
+flake8>=3.9.0  # Linting
+black>=21.5b2  # Code formatting
+
+# Cross-platform
+beeware>=0.3.0  # For Android development
