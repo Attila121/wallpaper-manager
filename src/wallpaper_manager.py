@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import requests
 from PIL import Image
@@ -166,15 +167,25 @@ class WallpaperManager:
             image_url = apod_data.get('hdurl') or apod_data['url']
             image_path = self.download_wallpaper(image_url)
             
+            # Store metadata
+            metadata = {
+                'title': apod_data.get('title'),
+                'explanation': apod_data.get('explanation'),
+                'date': apod_data.get('date'),
+                'copyright': apod_data.get('copyright'),
+                'media_type': apod_data.get('media_type'),
+                'hdurl': apod_data.get('hdurl'),
+                'download_date': datetime.now().isoformat()
+            }
+            self.store_wallpaper_metadata(image_path, metadata)
+            
             result = {
                 'path': image_path,
-                'title': apod_data['title'],
-                'explanation': apod_data['explanation'],
-                'date': apod_data['date']
+                **metadata
             }
             
             self.logger.info("Successfully retrieved APOD wallpaper", 
-                           wallpaper_info=result)
+                             wallpaper_info=result)
             return result
             
         except requests.RequestException as e:
@@ -204,3 +215,34 @@ class WallpaperManager:
                 f"Invalid image file: {str(e)}",
                 details={'image_path': str(image_path)}
             )
+            
+    def store_wallpaper_metadata(self, wallpaper_path: Path, metadata: dict):
+        """Store wallpaper metadata in a JSON file"""
+        try:
+            # Create metadata directory if it doesn't exist
+            metadata_dir = self.wallpaper_dir / 'metadata'
+            metadata_dir.mkdir(exist_ok=True)
+            
+            # Create metadata file with same name as wallpaper but .json extension
+            metadata_path = metadata_dir / f"{wallpaper_path.stem}.json"
+            
+            with open(metadata_path, 'w', encoding='utf-8') as f:
+                json.dump(metadata, f, indent=4)
+                
+            self.logger.info(f"Stored metadata for {wallpaper_path.name}")
+            return True
+        except Exception as e:
+            self.logger.exception("Failed to store metadata")
+            raise Exception(f"Failed to store metadata: {str(e)}")
+
+    def get_wallpaper_metadata(self, wallpaper_path: Path) -> Optional[dict]:
+        """Retrieve metadata for a wallpaper"""
+        try:
+            metadata_path = self.wallpaper_dir / 'metadata' / f"{wallpaper_path.stem}.json"
+            if metadata_path.exists():
+                with open(metadata_path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            return None
+        except Exception as e:
+            self.logger.exception("Failed to retrieve metadata")
+            return None

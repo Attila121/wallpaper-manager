@@ -1,5 +1,6 @@
 # Configuration files with sensitive data
 src/config_local.py
+src/run-wallpaper-manager.bat
 
 # Generated files
 Wallpapers/
